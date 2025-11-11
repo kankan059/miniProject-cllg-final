@@ -19,4 +19,4 @@ const mongoConnect = async () =>{
         process.exit(1);
     }
 } 
-export default mongoConnect
+export default mongoConnect;

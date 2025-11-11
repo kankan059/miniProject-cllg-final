@@ -1,40 +1,55 @@
-import express, { Express } from 'express';
-import * as dotenv from 'dotenv';
-import cors from 'cors'; // CORS import
-import connectDB from './config/db';
-import eventRoutes from './routes/eventRoutes';
-dotenv.config();
+// import express from "express";
+// import dotenv from "dotenv";
+// import cors from "cors";
+// import mongoConnect  from "./config/db";
+// import eventRoutes from "./routes/eventRoutes";
 
-// App Initialization
-const app: Express = express();
-const port = process.env.PORT || 5000;
+// dotenv.config();
+// const app = express();
+// app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+// app.use(cors());
+// app.use(express.json());
+
+// mongoConnect();
+
+// // routes
+// app.use("/api/events", eventRoutes);
+
+// const PORT = process.env.PORT || 3000;
+// app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+
+
+
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import mongoConnect from "./config/db.js"; // Ensure .js extension if using ES Modules
+import eventRoutes from "./routes/eventRoutes.js";
+import authRoutes from "./routes/authRoutes.js"; // Renamed for clarity
+
+dotenv.config();
+const app = express();
 
 // Middleware
-app.use(express.json()); 
-app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    origin: "http://localhost:3000", // frontend URL
+    methods: ["GET", "POST", "PATCH", "DELETE"],
+    credentials: true,
+  })
+);
 
-// CORS Setup
+app.use(express.json()); // Parses incoming JSON requests
 
-app.use(cors({
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true, // Cookies and headers allow 
-}));
+// Connect to MongoDB
+mongoConnect();
 
-// Test Route
-app.get('/', (req, res) => {
-    res.send(`Event Manager API Running on Port ${port}`);
-});
+// Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/events", eventRoutes);
 
-app.use('/api/events' , eventRoutes)
-// Server Start
-const startApp = async () => {
-    // Database connection
-    await connectDB(); 
-    
-    // Start listening
-    app.listen(port, () => {
-        console.log(`Server is running in ${process.env.PORT} mode at http://localhost:${port}`);
-    });
-};
 
-startApp();
+
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));

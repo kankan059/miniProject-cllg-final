@@ -1,23 +1,18 @@
+import express from "express";
+import {
+  getEvents,
+  createEvent,
+  updateEvent,
+  deleteEvent,
+  getEventById,
+} from "../controllers/eventControllers";
 
+const router = express.Router();
 
-import { Router } from 'express';
-import { 
-    getEvents, 
-    getEventById, 
-    createEvent, 
-    updateEvent, 
-    deleteEvent 
-} from '../controllers/eventControllers';
-
-const router = Router();
-
-// PUBLIC ACCESS ROUTES
-router.get('/', getEvents);          // GET /api/events All active events
-router.get('/:id', getEventById);    // Single event details
-
-// ADMIN/ORGANIZER 
-router.post('/', createEvent);        // Create new event
-router.put('/:id', updateEvent);      //  Update event
-router.delete('/:id', deleteEvent);   // Deletes event
+router.get("/", getEvents);
+router.post("/", createEvent);
+router.get("/:id", getEventById);
+router.patch("/:id", updateEvent);
+router.delete("/:id", deleteEvent);
 
 export default router;

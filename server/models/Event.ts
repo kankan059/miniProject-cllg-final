@@ -1,41 +1,17 @@
-// server/models/Event.ts
+import { Schema, models, model } from "mongoose";
 
-import mongoose, { Document, Schema } from 'mongoose';
-
-export interface IEvent extends Document {
-    title: string;
-    description: string;
-    date: Date;
-    location: string;
-    price: number;
-    capacity: number;
-    ticketsSold: number;
-    organizer: mongoose.Schema.Types.ObjectId;
-    isPaid: boolean; // 💡 New: Kya event mein payment required hai?
-    isActive: boolean;
-}
-
-const EventSchema: Schema = new Schema({
-    title: { type: String, required: true, trim: true },
+const EventSchema = new Schema(
+  {
+    name: { type: String, required: true },
+    venue: { type: String, required: true },
+    date: { type: String, required: true }, // ISO date string
     description: { type: String, required: true },
-    date: { type: Date, required: true },
-    location: { type: String, required: true },
-    
-    // Price and Payment Check
-    price: { type: Number, default: 0, min: 0 },
-    isPaid: { type: Boolean, default: false }, // Agar price > 0 ho toh isko true set kar sakte hain
-    
-    capacity: { type: Number, required: true, min: 1 },
-    ticketsSold: { type: Number, default: 0, min: 0 },
-    
-    organizer: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
-    },
-    
+    isPaid: { type: Boolean, default: false },
+    amount: { type: Number },
+    createdBy: { type: Schema.Types.ObjectId, ref: "User" },
     isActive: { type: Boolean, default: true },
-}, { timestamps: true });
+  },
+  { timestamps: true }
+);
 
-const Event = mongoose.model<IEvent>('Event', EventSchema);
-export default Event;
+export const Event = models.Event || model("Event", EventSchema);
