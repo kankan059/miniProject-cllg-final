@@ -24,7 +24,7 @@ export default function AdminPanel() {
     amount: "",
   });
 
-  // ✅ Load events from Mongo
+  //Load events from Mongo
   useEffect(() => {
     fetchEvents().then(setEvents).catch(console.error);
   }, []);
@@ -37,7 +37,7 @@ export default function AdminPanel() {
   const resetForm = () =>
     setForm({ name: "", venue: "", date: "", description: "", isPaid: false, amount: "" });
 
-  // ✅ Add or update event in DB
+  // Add or update event in DB
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -61,7 +61,7 @@ export default function AdminPanel() {
       setEvents(data);
       resetForm();
     } catch (err) {
-      console.error("❌ Submit failed:", err);
+      console.error(" Submit failed:", err);
       alert("Error saving event");
     }
   };

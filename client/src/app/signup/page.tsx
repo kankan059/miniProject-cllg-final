@@ -5,14 +5,17 @@ import { useRouter } from "next/navigation";
 import { registerUser } from "@/lib/api";
 import { signIn } from "next-auth/react";
 
+const INITIAL_FORM = {
+  name: "",
+  email: "",
+  password: "",
+};
+
+
 export default function SignupPage() {
   const router = useRouter();
 
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+  const [form, setForm] = useState(INITIAL_FORM);
 
   const [loading, setLoading] = useState(false);
 
@@ -26,9 +29,11 @@ export default function SignupPage() {
     try {
       const res = await registerUser(form);
 
-      if (res.message === "User registered successfully") {
+      if (res.message === "user registered successfully!!!!!!") {
         alert(" Signup successful! You can now log in.");
+        setForm(INITIAL_FORM);
         router.push("/login");
+
       } else {
         alert(res.message || "Something went wrong.");
       }

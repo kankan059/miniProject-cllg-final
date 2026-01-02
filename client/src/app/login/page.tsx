@@ -1,60 +1,37 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { loginUser } from "@/lib/api";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function LoginPage() {
   const router = useRouter();
-
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
-
   const [loading, setLoading] = useState(false);
-
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  }
+  const [form, setForm] = useState({ email: "", password: "" });
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
 
-    try {
-      // manual login via backend (Express)
-      const res = await loginUser({
-        email: form.email,
-        password: form.password,
-      });
+    const res = await signIn("credentials", {
+      email: form.email,
+      password: form.password,
+      redirect: false,
+    });
 
-      if (res.token) {
-        // store token for protected requests later (admin actions etc.)
-        localStorage.setItem("token", res.token);
-        localStorage.setItem("userRole", res.user?.role || "user");
-        localStorage.setItem("userName", res.user?.name || "");
+    setLoading(false);
 
-        alert("Login successful ✅");
-        router.push("/");
-      } else {
-        alert(res.message || "Invalid email or password");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Something went wrong");
-    } finally {
-      setLoading(false);
+    if (res?.ok) {
+      router.push("/");
+    } else {
+      alert("Invalid email or password");
     }
   }
 
   return (
-    <div className="min-h-screen bg-black text-green-400 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-black flex items-center justify-center px-4">
       <div className="w-full max-w-sm rounded-xl border border-green-700 bg-[#0a0a0a] p-6 shadow-lg shadow-green-900/40">
+        
         <h1 className="text-center text-3xl font-bold text-green-500 mb-2">
           Login
         </h1>
@@ -62,18 +39,20 @@ export default function LoginPage() {
           Access your account
         </p>
 
+        {/* Email / Password Login */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-green-400 mb-1">
               Email
             </label>
             <input
-              name="email"
               type="email"
               required
               value={form.email}
-              onChange={handleChange}
-              className="w-full rounded-lg border border-green-700 bg-black px-3 py-2 text-sm text-green-300 placeholder-green-600/60 focus:border-green-500 focus:outline-none"
+              onChange={(e) =>
+                setForm({ ...form, email: e.target.value })
+              }
+              className="w-full rounded-lg border border-green-700 bg-black px-3 py-2 text-sm text-green-300 focus:border-green-500 focus:outline-none"
               placeholder="you@email.com"
             />
           </div>
@@ -83,12 +62,13 @@ export default function LoginPage() {
               Password
             </label>
             <input
-              name="password"
               type="password"
               required
               value={form.password}
-              onChange={handleChange}
-              className="w-full rounded-lg border border-green-700 bg-black px-3 py-2 text-sm text-green-300 placeholder-green-600/60 focus:border-green-500 focus:outline-none"
+              onChange={(e) =>
+                setForm({ ...form, password: e.target.value })
+              }
+              className="w-full rounded-lg border border-green-700 bg-black px-3 py-2 text-sm text-green-300 focus:border-green-500 focus:outline-none"
               placeholder="••••••••"
             />
           </div>
@@ -102,16 +82,14 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* --- Or divider --- */}
+        {/* Divider */}
         <div className="flex items-center gap-2 my-5">
           <div className="h-px flex-1 bg-green-800" />
-          <div className="text-[11px] text-green-500 uppercase tracking-wide">
-            or
-          </div>
+          <span className="text-[11px] text-green-500 uppercase">or</span>
           <div className="h-px flex-1 bg-green-800" />
         </div>
 
-        {/* --- Google login --- */}
+        {/* Google Login */}
         <button
           onClick={() => signIn("google")}
           className="w-full flex items-center justify-center gap-2 rounded-lg border border-green-500 px-4 py-2 text-sm font-medium text-green-400 hover:bg-green-500 hover:text-black transition"
@@ -121,10 +99,10 @@ export default function LoginPage() {
             alt="Google"
             className="w-4 h-4"
           />
-          <span>Sign in with Google</span>
+          Sign in with Google
         </button>
 
-        {/* --- Sign up link --- */}
+        {/* Signup Link */}
         <p className="text-center text-xs text-green-300 mt-6">
           Don&apos;t have an account?{" "}
           <a

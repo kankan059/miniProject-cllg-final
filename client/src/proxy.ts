@@ -2,7 +2,15 @@ import { withAuth } from "next-auth/middleware";
 
 export default withAuth({
   callbacks: {
-    authorized: ({ token }) => token?.role === "admin",
+    authorized: ({ token, req }) => {
+      if (!token) return false;
+
+      if (req.nextUrl.pathname.startsWith("/admin")) {
+        return token.role === "admin";
+      }
+
+      return true;
+    },
   },
 });
 
