@@ -19,35 +19,7 @@ export default function EventDetails() {
   const id = Array.isArray(params.id) ? params.id[0] : params.id; // ensure string
   const [event, setEvent] = useState<Event | null>(null);
 
-  useEffect(() => {
-    if (!id) return;
 
-    // Mock data (replace with fetch later)
-    const allEvents: Event[] = [
-      {
-        id: 1,
-        name: "Tech Innovators Summit",
-        venue: "Delhi Convention Center",
-        date: "2025-11-25",
-        description:
-          "Join India’s top tech innovators for talks, workshops, and demos of cutting-edge technologies.",
-        isPaid: true,
-        amount: 499,
-      },
-      {
-        id: 2,
-        name: "Music & Beats Fest",
-        venue: "Mumbai Arena",
-        date: "2025-12-02",
-        description:
-          "A grand fusion of sound, lights, and performances featuring world-renowned DJs and artists.",
-        isPaid: false,
-      },
-    ];
-
-    const found = allEvents.find((e) => e.id === Number(id));
-    setEvent(found ?? null);
-  }, [id]);
 
   if (!event)
     return (

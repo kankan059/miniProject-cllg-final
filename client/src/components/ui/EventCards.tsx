@@ -44,7 +44,7 @@ export default function EventCards({ events }: { events: Event[] }) {
 
               <div className="flex items-center justify-between mt-4">
                 <Link
-                  href="/register"
+                  href={`/register/${event._id}`}
                   className="rounded-lg bg-green-500 px-4 py-2 text-sm font-semibold text-black hover:bg-green-400 transition"
                 >
                   Register
