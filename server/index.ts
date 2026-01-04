@@ -50,6 +50,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/registrations", registrationRoutes);
+app.use("/api/payment", paymentRoutes);
 
 
 

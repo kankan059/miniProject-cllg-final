@@ -1,4 +1,4 @@
-import { Schema, models, model } from "mongoose";
+import { Schema, model } from "mongoose";
 
 const RegistrationSchema = new Schema(
   {
@@ -11,27 +11,23 @@ const RegistrationSchema = new Schema(
     userEmail: {
       type: String,
       required: true,
-      index: true,
     },
-    userId: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    name: { type: String, required: true },
-    department: { type: String, required: true },
-    semester: { type: String, required: true },
-    paidAmount: Number,
+
+    name: String,
+    department: String,
+    semester: String,
+
     paymentStatus: {
       type: String,
-      enum: ["pending", "paid", "failed"],
+      enum: ["pending", "paid", "failed", "free"],
       default: "pending",
     },
+
+    paidAmount: Number,
   },
   { timestamps: true }
 );
 
-RegistrationSchema.index({ eventId: 1, userId: 1 }, { unique: true });
+RegistrationSchema.index({ eventId: 1, userEmail: 1 }, { unique: true });
 
-export const Registration =
-  models.Registration || model("Registration", RegistrationSchema);
+export const Registration = model("Registration", RegistrationSchema);

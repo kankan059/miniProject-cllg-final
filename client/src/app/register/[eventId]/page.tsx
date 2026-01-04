@@ -36,7 +36,7 @@ export default function RegisterPage() {
     semester: "",
   });
   useEffect(() => {
-    console.log("EVENT ID 👉", eventId);
+    console.log("EVENT ID", eventId);
   }, [eventId]);
 
   // 🔹 Fetch event data (admin-controlled)
@@ -77,12 +77,17 @@ export default function RegisterPage() {
 
     // PAID EVENT → PAYMENT FLOW
     if (eventInfo.isPaid) {
+      localStorage.setItem("name", form.name);
+      localStorage.setItem("department", form.department);
+      localStorage.setItem("semester", form.semester);
+      localStorage.setItem("userEmail", session.user.email);
+
       router.push(`/payment/${eventInfo._id}`);
       return;
     }
 
     // FREE EVENT → DIRECT REGISTER
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/registrations`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/registrations`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -90,9 +95,15 @@ export default function RegisterPage() {
       body: JSON.stringify({
         ...form,
         eventId: eventInfo._id,
-        userEmail : session.user.email,
+        userEmail: session.user.email,
       }),
     });
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message || "Registration failed");
+      return;
+    }
 
     alert("Registration successful!");
     setForm({ name: "", department: "", semester: "" });

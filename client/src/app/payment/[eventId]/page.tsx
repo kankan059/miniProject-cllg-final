@@ -3,12 +3,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 
-interface Event {
-    _id: string;
-    name: string;
-    amount: number;
-}
-
 declare global {
     interface Window {
         Razorpay: any;
@@ -16,91 +10,95 @@ declare global {
 }
 
 export default function PaymentPage() {
-    const params = useParams();
-    const eventId = params?.eventId as string;
+    const { eventId } = useParams();
     const router = useRouter();
+    const [event, setEvent] = useState<any>(null);
 
-    const [event, setEvent] = useState<Event | null>(null);
-    const [loading, setLoading] = useState(false);
-    console.log("EVENT ID BEFORE FETCH 👉", eventId);
-
-    // Fetch event info
     useEffect(() => {
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/events/${eventId}`)
             .then(res => res.json())
             .then(data => setEvent(data));
     }, [eventId]);
 
-    async function handlePayment() {
-        if (!event) return;
-        setLoading(true);
-
-        // 1️⃣ Create order from backend
-
+    const handlePayment = async () => {
         const orderRes = await fetch(
-            
             `${process.env.NEXT_PUBLIC_API_URL}/api/payment/create-order`,
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    amount: event.amount,
-                    eventId: event._id,
-                }),
+                body: JSON.stringify({ eventId, userEmail: localStorage.getItem("userEmail") }),
+
             }
         );
 
         const order = await orderRes.json();
-
-        // Open Razorpay
+        if (!orderRes.ok) {
+            alert(order.message);
+            return;
+        }
         const options = {
-            key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
+            key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
             amount: order.amount,
             currency: "INR",
             name: event.name,
             description: "Event Registration",
-            order_id: order.id,
+            order_id: order.order_id, // 🔥 MUST
 
             handler: async function (response: any) {
-                // Verify payment
-                await fetch(
+                const verifyRes = await fetch(
                     `${process.env.NEXT_PUBLIC_API_URL}/api/payment/verify`,
                     {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
-                            ...response,
-                            eventId: event._id,
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature,
+
+                            eventId,
+                            name: localStorage.getItem("name"),
+                            department: localStorage.getItem("department"),
+                            semester: localStorage.getItem("semester"),
+                            userEmail: localStorage.getItem("userEmail"),
                         }),
                     }
                 );
 
-                alert("Payment successful!");
+                const data = await verifyRes.json();
+
+                //  IMPORTANT CONDITION
+                if (!verifyRes.ok) {
+                    alert(data.message || "Payment verified but registration failed");
+                    return;
+                }
+
+                alert("Payment successful & registered!");
+                localStorage.clear();
                 router.push("/");
+            },
+
+            modal: {
+                ondismiss: function () {
+                    alert("Payment cancelled");
+                },
             },
         };
 
-        const razorpay = new window.Razorpay(options);
-        razorpay.open();
+        new window.Razorpay(options).open();
+    };
 
-        setLoading(false);
-    }
-
-    if (!event)
-        return <p className="text-center text-orange-400">Loading payment...</p>;
+    if (!event) return <p>Loading...</p>;
 
     return (
-        <div className="min-h-screen bg-black text-orange-400 flex items-center justify-center">
-            <div className="border border-orange-400 p-6 rounded-xl max-w-sm w-full">
-                <h1 className="text-xl font-bold mb-3">{event.name}</h1>
-                <p className="mb-4">Amount: ₹{event.amount}</p>
-
+        <div className="min-h-screen flex items-center justify-center bg-black text-orange-400">
+            <div className="border border-orange-400 p-6 rounded">
+                <h1 className="text-xl font-bold">{event.name}</h1>
+                <p className="my-3">Amount: ₹{event.amount}</p>
                 <button
                     onClick={handlePayment}
-                    disabled={loading}
-                    className="w-full bg-orange-400 text-black py-2 rounded-lg font-semibold"
+                    className="bg-orange-400 text-black px-4 py-2 rounded"
                 >
-                    {loading ? "Processing..." : "Pay Now"}
+                    Pay Now
                 </button>
             </div>
         </div>
