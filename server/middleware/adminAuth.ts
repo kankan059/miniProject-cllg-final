@@ -1,6 +1,12 @@
 import jwt from "jsonwebtoken";
 
-export const adminOnly = (req, res, next) => {
+import { Request, Response, NextFunction } from "express";
+
+export const adminAuth = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const token =
     req.cookies?.["next-auth.session-token"] ||
     req.cookies?.["__Secure-next-auth.session-token"];
