@@ -42,7 +42,7 @@ export default function PaymentPage() {
             currency: "INR",
             name: event.name,
             description: "Event Registration",
-            order_id: order.order_id, // 🔥 MUST
+            order_id: order.order_id, //  MUST
 
             handler: async function (response: any) {
                 const verifyRes = await fetch(
@@ -96,7 +96,7 @@ export default function PaymentPage() {
                 <p className="my-3">Amount: ₹{event.amount}</p>
                 <button
                     onClick={handlePayment}
-                    className="bg-orange-400 text-black px-4 py-2 rounded"
+                    className="bg-orange-400 text-black px-4 py-2 rounded hover:bg-orange-500 active:bg-amber-900 cursor-pointer"
                 >
                     Pay Now
                 </button>

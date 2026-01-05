@@ -1,5 +1,5 @@
-import * as nodemailer from "nodemailer";
-
+// import * as nodemailer from "nodemailer";
+import nodemailer from "nodemailer";
 export async function sendEmail(
   to: string,
   subject: string,
