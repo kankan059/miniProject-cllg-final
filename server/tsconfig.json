@@ -1,13 +1,25 @@
 // tsconfig.json
+// {
+//   "compilerOptions": {
+//     "module": "NodeNext",        
+//     "moduleResolution": "NodeNext",
+//     "target": "ES2022",           
+//     "strict": true,               
+//     "esModuleInterop": true,      
+//     "skipLibCheck": true,
+//     "forceConsistentCasingInFileNames": true
+//   },
+//   "include": ["**/*.ts"] 
+// }
 {
   "compilerOptions": {
-    "module": "NodeNext",          // ✅ Node.js ke latest module system ko use kare
-    "moduleResolution": "NodeNext",// ✅ Module resolution bhi Node.js ke hisaab se kare
-    "target": "ES2022",            // ✅ Latest JavaScript features use kare
-    "strict": true,                // Achhe coding practices ke liye
-    "esModuleInterop": true,       // Imports ko theek se handle karne ke liye
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "target": "ES2022",
+    "module": "CommonJS",
+    "outDir": "dist",
+    "rootDir": ".",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
-  "include": ["**/*.ts"] 
+  "include": ["**/*.ts"]
 }
