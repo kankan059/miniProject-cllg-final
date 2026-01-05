@@ -3,7 +3,8 @@ import crypto from "crypto";
 import razorpay from "../config/razorpay";
 import { Event } from "../models/Event";
 import { Registration } from "../models/Registration";
-
+import { generateQrToken } from "../utils/generateQrToken";
+import { sendEmail } from "../utils/sendEmail";
 /**
  * CREATE ORDER
  */
@@ -37,7 +38,7 @@ export const createOrder = async (req: Request, res: Response) => {
         });
 
         return res.status(200).json({
-            order_id: order.id,   
+            order_id: order.id,
             amount: order.amount,
             currency: order.currency,
         });
@@ -60,6 +61,7 @@ export const verifyPayment = async (req: Request, res: Response) => {
             name,
             department,
             semester,
+
             userEmail,
         } = req.body;
 
@@ -93,16 +95,41 @@ export const verifyPayment = async (req: Request, res: Response) => {
             });
         }
         //  SAVE REGISTRATION AFTER PAYMENT
+        const qrToken = generateQrToken();
         await Registration.create({
             eventId,
             name,
             department,
             semester,
             userEmail,
+            qrToken,
             paymentStatus: "paid",
+
         });
+        const event = await Event.findById(eventId);
+        await sendEmail(
+            userEmail,
+            "🎉 Event Registration Successful",
+            `
+    <h2>Registration Confirmed</h2>
+    <p>You are successfully registered for:</p>
+    <p><b>${event.name}</b></p>
+    <p>Date: ${event.date}</p>
+    <p>Venue: ${event.venue}</p>
+
+    ${qrToken
+                ? `<p>Show this QR at entry:</p>
+           <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${qrToken}" />`
+                : ""
+            }
+
+    <p>Thank you </p>
+  `
+        );
+
 
         return res.json({ message: "Payment verified & registration saved" });
+
     } catch (error) {
         console.error("VERIFY PAYMENT ERROR ", error);
         return res.status(500).json({ message: "Payment verification failed" });

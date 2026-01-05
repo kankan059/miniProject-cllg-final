@@ -22,7 +22,11 @@ const RegistrationSchema = new Schema(
       enum: ["pending", "paid", "failed", "free"],
       default: "pending",
     },
-
+    qrToken: { type: String, unique: true },
+    checkInAt: {
+      type: Date,
+      default: null,
+    },
     paidAmount: Number,
   },
   { timestamps: true }

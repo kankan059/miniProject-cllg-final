@@ -68,7 +68,7 @@ export default function SignupPage() {
               value={form.name}
               onChange={handleChange}
               className="w-full rounded-lg border border-green-700 bg-black px-3 py-2 text-sm text-green-300 placeholder-green-600/60 focus:border-green-500 focus:outline-none"
-              placeholder="John Doe"
+              placeholder="saktimaan dushman"
             />
           </div>
 

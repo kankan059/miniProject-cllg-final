@@ -14,6 +14,7 @@
     "jsx": "react-jsx",
     "incremental": true,
     "types": ["node"],
+    "noImplicitAny": false,
     "plugins": [
       {
         "name": "next"

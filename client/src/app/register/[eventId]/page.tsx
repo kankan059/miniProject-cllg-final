@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-
+import { QRCodeCanvas } from "qrcode.react";
 interface EventInfo {
   _id: string;
   name: string;
@@ -25,7 +25,7 @@ const departments = [
 export default function RegisterPage() {
   const { eventId } = useParams();
   const router = useRouter();
-
+  const [qrToken, setQrToken] = useState<string | null>(null);
   const [eventInfo, setEventInfo] = useState<EventInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const { data: session } = useSession();
@@ -39,7 +39,7 @@ export default function RegisterPage() {
     console.log("EVENT ID", eventId);
   }, [eventId]);
 
-  // 🔹 Fetch event data (admin-controlled)
+  // Fetch event data (admin-controlled)
   useEffect(() => {
     const fetchEvent = async () => {
       try {
@@ -104,10 +104,11 @@ export default function RegisterPage() {
       alert(data.message || "Registration failed");
       return;
     }
+    setQrToken(data.qrToken);
 
     alert("Registration successful!");
     setForm({ name: "", department: "", semester: "" });
-    router.push("/");
+    // router.push("/");
   }
 
   if (loading || !eventInfo) {
@@ -125,72 +126,86 @@ export default function RegisterPage() {
           {eventInfo.name} Registration
         </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Name */}
-          <div>
-            <label className="block text-sm mb-1">Name</label>
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              required
-              className="w-full rounded-lg border border-orange-400 bg-black px-3 py-2 text-sm"
-            />
-          </div>
+        {qrToken ? (
+          <div className="text-center">
+            <h2 className="text-xl font-semibold mb-4 text-green-400">
+              Registration Successful 🎉
+            </h2>
 
-          {/* Department */}
-          <div>
-            <label className="block text-sm mb-1">Department</label>
-            <select
-              name="department"
-              value={form.department}
-              onChange={handleChange}
-              required
-              className="w-full rounded-lg border border-orange-400 bg-black px-3 py-2 text-sm"
-            >
-              <option value="">Select Department</option>
-              {departments.map((dept) => (
-                <option key={dept} value={dept}>
-                  {dept}
-                </option>
-              ))}
-            </select>
-          </div>
+            <QRCodeCanvas value={qrToken} size={220} />
 
-          {/* Semester */}
-          <div>
-            <label className="block text-sm mb-1">Semester</label>
-            <select
-              name="semester"
-              value={form.semester}
-              onChange={handleChange}
-              required
-              className="w-full rounded-lg border border-orange-400 bg-black px-3 py-2 text-sm"
-            >
-              <option value="">Select Semester</option>
-              {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
-                <option key={sem} value={sem}>
-                  {sem} Semester
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Paid info */}
-          {eventInfo.isPaid && (
-            <p className="text-yellow-400 text-sm">
-              Registration Fee: ₹{eventInfo.amount}
+            <p className="mt-4 text-sm text-orange-300 flex justify-center items-center">
+              Show this QR code at the event entry
             </p>
-          )}
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Name */}
+            <div>
+              <label className="block text-sm mb-1">Name</label>
+              <input
+                type="text"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                required
+                className="w-full rounded-lg border border-orange-400 bg-black px-3 py-2 text-sm"
+              />
+            </div>
 
-          <button
-            type="submit"
-            className="w-full rounded-lg bg-orange-400 py-2 text-sm font-semibold text-black hover:opacity-90 transition"
-          >
-            {eventInfo.isPaid ? "Proceed to Payment" : "Register Now"}
-          </button>
-        </form>
+            {/* Department */}
+            <div>
+              <label className="block text-sm mb-1">Department</label>
+              <select
+                name="department"
+                value={form.department}
+                onChange={handleChange}
+                required
+                className="w-full rounded-lg border border-orange-400 bg-black px-3 py-2 text-sm"
+              >
+                <option value="">Select Department</option>
+                {departments.map((dept) => (
+                  <option key={dept} value={dept}>
+                    {dept}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Semester */}
+            <div>
+              <label className="block text-sm mb-1">Semester</label>
+              <select
+                name="semester"
+                value={form.semester}
+                onChange={handleChange}
+                required
+                className="w-full rounded-lg border border-orange-400 bg-black px-3 py-2 text-sm"
+              >
+                <option value="">Select Semester</option>
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
+                  <option key={sem} value={sem}>
+                    {sem} Semester
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Paid info */}
+            {eventInfo.isPaid && (
+              <p className="text-yellow-400 text-sm">
+                Registration Fee: ₹{eventInfo.amount}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              className="w-full rounded-lg bg-orange-400 py-2 text-sm font-semibold text-black hover:opacity-90 transition"
+            >
+              {eventInfo.isPaid ? "Proceed to Payment" : "Register Now"}
+            </button>
+          </form>
+        )}
       </div>
     </section>
   );

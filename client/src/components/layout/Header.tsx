@@ -11,7 +11,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-green-700 bg-black text-green-400">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-        
+
         {/* Logo */}
         <Link
           href="/"
@@ -40,9 +40,9 @@ export default function Header() {
             </>
           ) : (
             <>
-              <span className="text-green-400 text-sm font-semibold">
+              <Link href="/profile" className="text-green-400 text-sm font-semibold hover:underline">
                 {session.user?.name}
-              </span>
+              </Link>
 
               <button
                 onClick={() => signOut({ callbackUrl: "/" })}

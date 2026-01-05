@@ -50,3 +50,40 @@ export async function registerUser(data: any) {
   });
   return res.json();
 }
+
+export async function fetchRegistrationsByEvent(eventId: string) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/registrations/event/${eventId}`,
+    {
+      method: "GET",
+      credentials: "include", 
+    }
+  );
+
+  console.log("STATUS ", res.status);
+
+  if (!res.ok) {
+    const text = await res.text();
+    console.log("ERROR BODY ", text);
+    throw new Error("Failed to load registrations");
+  }
+
+  return res.json();
+}
+
+
+
+export async function fetchAttendanceSummary(eventId: string) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/attendance/summury/${eventId}`,
+    {
+      credentials: "include", // NextAuth cookie
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to load attendees");
+  }
+
+  return res.json();
+}

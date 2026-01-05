@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { fetchEvents, addEvent, updateEvent, deleteEvent } from "@/lib/api";
+import Link from "next/link";
+import ScanButton from "./components/ScanButton";
 
 interface Event {
   _id?: string;
@@ -90,6 +92,10 @@ export default function AdminPanel() {
     <section className="min-h-screen bg-black text-green-400 py-12">
       <div className="mx-auto max-w-5xl px-4">
         <h1 className="text-center text-3xl font-bold text-green-500 mb-8">Admin Panel</h1>
+        <div className="flex w-full justify-center items-center">
+        <ScanButton/>
+
+        </div>
 
         {/* Form */}
         <div className="mb-10 rounded-xl border border-green-700 bg-[#0a0a0a] p-6">
@@ -124,6 +130,9 @@ export default function AdminPanel() {
           </form>
         </div>
 
+
+
+
         {/* Event List */}
         <div className="rounded-xl border border-green-700 bg-[#0a0a0a] p-6">
           <h2 className="text-xl font-semibold text-green-400 mb-4">All Events</h2>
@@ -154,12 +163,21 @@ export default function AdminPanel() {
                       <button onClick={() => handleDelete(e._id!)} className="border border-red-500 text-red-500 px-3 py-1 rounded-md text-xs">
                         Delete
                       </button>
+                     
+                      <Link href={`admin/viewRegistration/${e._id}`}
+                        className="border border-blue-400 text-blue-400 px-3 py-1 rounded-md text-xs"
+                      >
+                        View Registrations
+                      </Link>
+
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+
           )}
+
         </div>
       </div>
     </section>
