@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { QRCodeCanvas } from "qrcode.react";
+import { motion } from "framer-motion";
 interface EventInfo {
   _id: string;
   name: string;
@@ -119,94 +120,183 @@ export default function RegisterPage() {
     );
   }
 
-  return (
-    <section className="min-h-screen bg-black text-orange-400 py-12">
-      <div className="mx-auto max-w-lg rounded-xl border border-orange-400 bg-[#0a0a0a] p-8 shadow-lg shadow-orange-400/40">
-        <h1 className="mb-6 text-center text-3xl font-bold text-orange-400">
-          {eventInfo.name} Registration
-        </h1>
+return (
+  <section className="relative min-h-screen overflow-hidden bg-gradient-to-br from-white via-slate-50 to-sky-50 py-16 text-slate-700">
+    {/* subtle noise */}
+    <div className="pointer-events-none absolute inset-0 opacity-[0.04] bg-[url('https://www.transparenttextures.com/patterns/noise.png')]" />
 
-        {qrToken ? (
-          <div className="text-center">
-            <h2 className="text-xl font-semibold mb-4 text-green-400">
-              Registration Successful 🎉
-            </h2>
+    {/* soft blobs */}
+    <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-sky-200/40 blur-3xl" />
+    <div className="absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-indigo-200/40 blur-3xl" />
 
+    <motion.div
+      initial={{ opacity: 0, y: 60, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="relative mx-auto max-w-lg rounded-3xl
+        border border-slate-200
+        bg-white/80 p-8
+        shadow-[0_30px_80px_-30px_rgba(0,0,0,0.15)]
+        backdrop-blur-xl"
+    >
+      <motion.h1
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15 }}
+        className="mb-2 text-center text-3xl font-extrabold tracking-widest text-slate-800"
+      >
+        {eventInfo.name}
+      </motion.h1>
+
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.25 }}
+        className="mb-8 text-center text-sm text-slate-500"
+      >
+        Event Registration
+      </motion.p>
+
+      {qrToken ? (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ type: "spring", stiffness: 160, damping: 14 }}
+          className="text-center"
+        >
+          <h2 className="mb-4 text-xl font-semibold text-emerald-600">
+            Registration Successful
+          </h2>
+
+          <motion.div
+            animate={{ scale: [1, 1.05, 1] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            className="inline-block rounded-2xl bg-white p-4 shadow-lg"
+          >
             <QRCodeCanvas value={qrToken} size={220} />
+          </motion.div>
 
-            <p className="mt-4 text-sm text-orange-300 flex justify-center items-center">
-              Show this QR code at the event entry
-            </p>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Name */}
-            <div>
-              <label className="block text-sm mb-1">Name</label>
-              <input
-                type="text"
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                required
-                className="w-full rounded-lg border border-orange-400 bg-black px-3 py-2 text-sm"
-              />
-            </div>
+          <p className="mt-4 text-sm text-slate-600">
+            Show this QR code at the event entry
+          </p>
+        </motion.div>
+      ) : (
+        <motion.form
+          onSubmit={handleSubmit}
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {},
+            visible: {
+              transition: {
+                staggerChildren: 0.08,
+              },
+            },
+          }}
+          className="space-y-6"
+        >
+          {/* Name */}
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0 },
+            }}
+          >
+            <label className="mb-1 block text-xs uppercase tracking-wider text-slate-500">
+              Name
+            </label>
+            <input
+              type="text"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              required
+              className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm
+                focus:border-sky-500 focus:ring-2 focus:ring-sky-200 transition"
+            />
+          </motion.div>
 
-            {/* Department */}
-            <div>
-              <label className="block text-sm mb-1">Department</label>
-              <select
-                name="department"
-                value={form.department}
-                onChange={handleChange}
-                required
-                className="w-full rounded-lg border border-orange-400 bg-black px-3 py-2 text-sm"
-              >
-                <option value="">Select Department</option>
-                {departments.map((dept) => (
-                  <option key={dept} value={dept}>
-                    {dept}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Semester */}
-            <div>
-              <label className="block text-sm mb-1">Semester</label>
-              <select
-                name="semester"
-                value={form.semester}
-                onChange={handleChange}
-                required
-                className="w-full rounded-lg border border-orange-400 bg-black px-3 py-2 text-sm"
-              >
-                <option value="">Select Semester</option>
-                {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
-                  <option key={sem} value={sem}>
-                    {sem} Semester
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Paid info */}
-            {eventInfo.isPaid && (
-              <p className="text-yellow-400 text-sm">
-                Registration Fee: ₹{eventInfo.amount}
-              </p>
-            )}
-
-            <button
-              type="submit"
-              className="w-full rounded-lg bg-orange-400 py-2 text-sm font-semibold text-black hover:opacity-90 transition"
+          {/* Department */}
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0 },
+            }}
+          >
+            <label className="mb-1 block text-xs uppercase tracking-wider text-slate-500">
+              Department
+            </label>
+            <select
+              name="department"
+              value={form.department}
+              onChange={handleChange}
+              required
+              className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm
+                focus:border-sky-500 focus:ring-2 focus:ring-sky-200 transition"
             >
-              {eventInfo.isPaid ? "Proceed to Payment" : "Register Now"}
-            </button>
-          </form>
-        )}
-      </div>
-    </section>
-  );
+              <option value="">Select Department</option>
+              {departments.map((dept) => (
+                <option key={dept} value={dept}>
+                  {dept}
+                </option>
+              ))}
+            </select>
+          </motion.div>
+
+          {/* Semester */}
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0 },
+            }}
+          >
+            <label className="mb-1 block text-xs uppercase tracking-wider text-slate-500">
+              Semester
+            </label>
+            <select
+              name="semester"
+              value={form.semester}
+              onChange={handleChange}
+              required
+              className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm
+                focus:border-sky-500 focus:ring-2 focus:ring-sky-200 transition"
+            >
+              <option value="">Select Semester</option>
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
+                <option key={sem} value={sem}>
+                  {sem} Semester
+                </option>
+              ))}
+            </select>
+          </motion.div>
+
+          {eventInfo.isPaid && (
+            <motion.p
+              variants={{
+                hidden: { opacity: 0 },
+                visible: { opacity: 1 },
+              }}
+              className="text-sm font-medium text-amber-600"
+            >
+              Registration Fee: ₹{eventInfo.amount}
+            </motion.p>
+          )}
+
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            type="submit"
+            className="w-full rounded-xl
+              bg-gradient-to-r from-sky-500 via-indigo-500 to-purple-500
+              py-3 text-sm font-bold tracking-widest text-white
+              shadow-lg"
+          >
+            {eventInfo.isPaid ? "PROCEED TO PAYMENT" : "REGISTER NOW"}
+          </motion.button>
+        </motion.form>
+      )}
+    </motion.div>
+  </section>
+);
+
 }

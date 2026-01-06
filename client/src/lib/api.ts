@@ -1,4 +1,4 @@
-// src/lib/api.ts
+
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 export async function fetchEvents() {
@@ -86,4 +86,15 @@ export async function fetchAttendanceSummary(eventId: string) {
   }
 
   return res.json();
+}
+
+
+export async function getUserFromDB() {
+  const email = cookies().get("user_email")?.value
+  if (!email) return null
+
+  return await db.user.findUnique({
+    where: { email },
+    select: { id: true, role: true }
+  })
 }

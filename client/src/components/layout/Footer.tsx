@@ -1,68 +1,138 @@
 // components/Footer.tsx
-"use client"
+"use client";
 import Link from "next/link";
-
+import { Instagram, Github, Users, Mail } from "lucide-react";
+import {motion } from "framer-motion"
 export default function Footer() {
-  return (
-    <footer className="border-t border-gray-200 bg-gray-50 py-8 text-gray-700 dark:border-gray-800 dark:bg-gray-950 dark:text-gray-300">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-4">
-          {/* Brand */}
-          <div>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">EventManager</h2>
-            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-              Plan, manage, and enjoy your events with ease.
-            </p>
-          </div>
+return (
+  <footer className="relative overflow-hidden border-t border-sky-200 bg-gradient-to-br from-white via-slate-50 to-sky-50 text-slate-700">
+    {/* subtle noise */}
+    <div className="pointer-events-none absolute inset-0 opacity-[0.04] bg-[url('https://www.transparenttextures.com/patterns/noise.png')]" />
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-sm font-semibold uppercase text-gray-900 dark:text-gray-100">Quick Links</h3>
-            <ul className="mt-2 space-y-1 text-sm">
-              <li><Link href="/" className="hover:text-blue-500">Home</Link></li>
-              <li><Link href="/events" className="hover:text-blue-500">Events</Link></li>
-              <li><Link href="/create" className="hover:text-blue-500">Create Event</Link></li>
-              <li><Link href="/pricing" className="hover:text-blue-500">Pricing</Link></li>
-            </ul>
-          </div>
+    {/* soft blobs */}
+    <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-sky-200/40 blur-3xl" />
+    <div className="absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-indigo-200/40 blur-3xl" />
 
-          {/* Support */}
-          <div>
-            <h3 className="text-sm font-semibold uppercase text-gray-900 dark:text-gray-100">Support</h3>
-            <ul className="mt-2 space-y-1 text-sm">
-              <li><Link href="/faq" className="hover:text-blue-500">FAQ</Link></li>
-              <li><Link href="/contact" className="hover:text-blue-500">Contact</Link></li>
-              <li><Link href="/privacy" className="hover:text-blue-500">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="hover:text-blue-500">Terms & Conditions</Link></li>
-            </ul>
-          </div>
-
-          {/* Newsletter */}
-          <div>
-            <h3 className="text-sm font-semibold uppercase text-gray-900 dark:text-gray-100">Newsletter</h3>
-            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-              Subscribe to get updates about new events.
-            </p>
-            <form className="mt-3 flex gap-2">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-900"
-              />
-              <button
-                type="submit"
-                className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700"
-              >
-                Subscribe
-              </button>
-            </form>
-          </div>
+    <div className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="grid gap-8 sm:grid-cols-2 md:grid-cols-3"
+      >
+        {/* Brand */}
+        <div>
+          <h2 className="text-lg font-extrabold tracking-wide text-slate-800">
+            EventManager
+          </h2>
+          <p className="mt-2 text-sm text-slate-500">
+            Plan, manage, and enjoy your events with ease.
+          </p>
         </div>
 
-        <div className="mt-8 border-t border-gray-200 pt-4 text-center text-sm text-gray-500 dark:border-gray-800 dark:text-gray-400">
+        {/* Quick Links */}
+        <div>
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-700">
+            Quick Links
+          </h3>
+          <ul className="mt-3 space-y-2 text-sm">
+            <li>
+              <Link href="/" className="hover:text-sky-600 transition">
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link href="/" className="hover:text-sky-600 transition">
+                Events
+              </Link>
+            </li>
+          
+          </ul>
+        </div>
+
+        {/* Support */}
+        <div>
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-700">
+            Support
+          </h3>
+          <ul className="mt-3 space-y-2 text-sm">
+            <li>
+              <Link href="/" className="hover:text-sky-600 transition">
+                Contact
+              </Link>
+            </li>
+            <li>
+              <Link href="/" className="hover:text-sky-600 transition">
+                Privacy Policy
+              </Link>
+            </li>
+            <li>
+              <Link href="/" className="hover:text-sky-600 transition">
+                Terms & Conditions
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </motion.div>
+
+      {/* Bottom */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.15 }}
+        className="mt-10 flex flex-col items-center gap-4 border-t border-sky-200 pt-6 text-sm"
+      >
+        <p className="flex items-center gap-2 text-slate-500">
+          <Users size={16} />
+          Developed by{" "}
+          <span className="font-medium text-slate-700">
+            Kankan Ray & Ezaz Ahmed Khan
+          </span>
+        </p>
+
+        {/* Social + Email */}
+        <div className="flex flex-wrap items-center justify-center gap-6">
+          <a
+            href="https://instagram.com/kongkon_ray_"
+            target="_blank"
+            className="flex items-center gap-1 text-slate-500 hover:text-pink-500 transition"
+          >
+            <Instagram size={18} />
+            <span>Kankan</span>
+          </a>
+
+          <a
+            href="mailto:kankanray059@gmail.com"
+            className="flex items-center gap-1 text-slate-500 hover:text-sky-600 transition"
+          >
+            <Mail size={18} />
+            <span>Email</span>
+          </a>
+
+          <a
+            href="https://instagram.com/ezee.io"
+            target="_blank"
+            className="flex items-center gap-1 text-slate-500 hover:text-pink-500 transition"
+          >
+            <Instagram size={18} />
+            <span>Ezaz</span>
+          </a>
+
+          <a
+            href="mailto:ezeestudy@gmail.com"
+            className="flex items-center gap-1 text-slate-500 hover:text-sky-600 transition"
+          >
+            <Mail size={18} />
+            <span>Email</span>
+          </a>
+        </div>
+
+        <p className="text-center text-slate-500">
           © {new Date().getFullYear()} EventManager. All rights reserved.
-        </div>
-      </div>
-    </footer>
-  );
+        </p>
+      </motion.div>
+    </div>
+  </footer>
+);
+
 }

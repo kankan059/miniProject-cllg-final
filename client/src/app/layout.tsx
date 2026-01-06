@@ -6,6 +6,19 @@ import Footer from "@/components/layout/Footer";
 import ClientSessionProvider from "@/components/ClientSessionProvider";
 import Script from "next/script";
 
+import { Cinzel, Inter } from "next/font/google";
+
+export const cinzel = Cinzel({
+  subsets: ["latin"],
+  variable: "--font-disney",
+  weight: ["500", "600", "700", "800"],
+});
+
+export const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-body",
+});
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -29,14 +42,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+         className={`${cinzel.variable} ${inter.variable}`}
       >
-          <Script
+        <Script
           src="https://checkout.razorpay.com/v1/checkout.js"
           strategy="afterInteractive"
         />
         <ClientSessionProvider>
-          
+
           <Header />
           <main>{children}</main>
           <Footer />

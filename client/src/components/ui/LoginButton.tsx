@@ -9,7 +9,7 @@ export default function LoginButtons() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  // ✅ Auto redirect based on role after login
+  // Auto redirect based on role after login
   useEffect(() => {
     if (status === "authenticated" && session?.user) {
       const userEmail = session.user.email || "";
