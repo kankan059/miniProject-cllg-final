@@ -1,4 +1,5 @@
-import express from "express";
+import express , { Router } from "express";
+
 import { createRegistration,getRegistrationsByEvent,getMyRegistrations} from "../controllers/regitstrationControllers";
 
 const router = express.Router();
