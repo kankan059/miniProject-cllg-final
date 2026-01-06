@@ -128,11 +128,13 @@ import { Event } from "../models/Event";
 import { generateQrToken } from "../utils/generateQrToken";
 import { sendEmail } from "../utils/sendEmail";
 
+/* ================= CREATE REGISTRATION ================= */
+
 export const createRegistration = async (req: Request, res: Response) => {
   try {
     const { name, department, semester, eventId, userEmail } = req.body;
 
-    if (!mongoose.Types.ObjectId.isValid(eventId)) {
+    if (!mongoose.isValidObjectId(eventId)) {
       return res.status(400).json({ message: "Invalid event ID" });
     }
 
@@ -141,12 +143,8 @@ export const createRegistration = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Event not found" });
     }
 
-    const alreadyRegistered = await Registration.findOne({
-      eventId,
-      userEmail,
-    });
-
-    if (alreadyRegistered) {
+    const existing = await Registration.findOne({ eventId, userEmail });
+    if (existing) {
       return res.status(409).json({
         message: "You are already registered for this event",
       });
@@ -174,7 +172,7 @@ export const createRegistration = async (req: Request, res: Response) => {
       <p>Date: ${event.date}</p>
       <p>Venue: ${event.venue}</p>
       <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${qrToken}" />
-    `
+      `
     );
 
     res.status(201).json({
@@ -183,10 +181,11 @@ export const createRegistration = async (req: Request, res: Response) => {
       qrToken,
     });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 };
+
+/* ================= GET REGISTRATIONS BY EVENT ================= */
 
 export const getRegistrationsByEvent = async (
   req: Request,
@@ -195,7 +194,7 @@ export const getRegistrationsByEvent = async (
   try {
     const { eventId } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(eventId)) {
+    if (!mongoose.isValidObjectId(eventId)) {
       return res.status(400).json({ message: "Invalid event ID" });
     }
 
@@ -217,10 +216,11 @@ export const getRegistrationsByEvent = async (
       registrations,
     });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 };
+
+/* ================= GET MY REGISTRATIONS ================= */
 
 export const getMyRegistrations = async (req: Request, res: Response) => {
   try {
@@ -238,7 +238,6 @@ export const getMyRegistrations = async (req: Request, res: Response) => {
 
     res.json(registrations);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 };
