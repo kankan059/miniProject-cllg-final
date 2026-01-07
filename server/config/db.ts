@@ -4,7 +4,6 @@ dotenv.config();
 
 
 const mongoConnect = async () =>{
-    mongoose.set("bufferCommands", false);
     const mongoURI = process.env.MONGO_URI;
 
     if(!mongoURI){
