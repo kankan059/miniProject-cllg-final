@@ -10,6 +10,7 @@ const EventSchema = new Schema(
     amount: { type: Number },
     createdBy: { type: Schema.Types.ObjectId, ref: "User" },
     isActive: { type: Boolean, default: true },
+    createdByName: { type: String, required: true },
   },
   { timestamps: true }
 );

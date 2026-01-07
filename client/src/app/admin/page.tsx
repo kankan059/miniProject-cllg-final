@@ -12,6 +12,7 @@ interface Event {
   description: string;
   isPaid: boolean;
   amount?: number;
+  createdByName: string;
 }
 
 export default function AdminPanel() {
@@ -24,6 +25,7 @@ export default function AdminPanel() {
     description: "",
     isPaid: false,
     amount: "",
+    createdByName: "",
   });
 
   //Load events from Mongo
@@ -37,7 +39,7 @@ export default function AdminPanel() {
   };
 
   const resetForm = () =>
-    setForm({ name: "", venue: "", date: "", description: "", isPaid: false, amount: "" });
+    setForm({ name: "", venue: "", date: "", description: "", isPaid: false, amount: "" , createdByName: "" });
 
   // Add or update event in DB
   const handleSubmit = async (e: React.FormEvent) => {
@@ -50,6 +52,7 @@ export default function AdminPanel() {
         description: form.description,
         isPaid: form.isPaid,
         amount: form.isPaid ? Number(form.amount) : undefined,
+        createdByName: form.createdByName,
       };
 
       if (editingId) {
@@ -78,6 +81,7 @@ export default function AdminPanel() {
       description: ev.description,
       isPaid: ev.isPaid,
       amount: ev.amount?.toString() || "",
+      createdByName: ev.createdByName,
     });
     setEditingId(id);
   };
@@ -172,7 +176,14 @@ export default function AdminPanel() {
             />
             <label>Paid Event</label>
           </div>
-
+          <input
+            name="createdByName"
+            value={form.createdByName}
+            onChange={handleChange}
+            placeholder="Organizer Name with club name"
+            required
+            className="input bg-white border-slate-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+          />
           {form.isPaid && (
             <input
               type="number"
@@ -247,8 +258,10 @@ export default function AdminPanel() {
                 <th className="py-3 text-left">Name</th>
                 <th className="py-3 text-left">Venue</th>
                 <th className="py-3 text-left">Date</th>
+                <th className="py-3 text-left">Created By</th>
                 <th className="py-3 text-left">Type</th>
                 <th className="py-3 text-left">Actions</th>
+                
               </tr>
             </thead>
             <tbody>
@@ -260,6 +273,7 @@ export default function AdminPanel() {
                   <td className="py-3">{e.name}</td>
                   <td className="py-3">{e.venue}</td>
                   <td className="py-3">{e.date}</td>
+                  <td className="py-3">{e.createdByName}</td>
                   <td className="py-3">
                     {e.isPaid ? (
                       <span className="text-amber-600 font-medium">
