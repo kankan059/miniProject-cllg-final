@@ -23,6 +23,7 @@
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
     "crypto": "^1.0.1",
+    "html5-qrcode": "^2.3.8",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^7.0.12",
     "qrcode.react": "^4.2.0",
