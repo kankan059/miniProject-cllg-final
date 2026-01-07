@@ -12,11 +12,11 @@ export const getEventById = async (req: Request, res: Response) => {
 };
 
 export const createEvent = async (req: Request, res: Response) => {
-  const { name, venue, date, description, isPaid, amount } = req.body;
-  if (!name || !venue || !date || !description)
+  const { name, venue, date, description, isPaid, amount , createdByName } = req.body;
+  if (!name || !venue || !date || !description || !createdByName)
     return res.status(400).json({ message: "Missing fields" });
 
-  const newEvent = new Event({ name, venue, date, description, isPaid, amount });
+  const newEvent = new Event({ name, venue, date, description, isPaid, amount , createdByName });
   await newEvent.save();
   res.status(201).json(newEvent);
 };
