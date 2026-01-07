@@ -31,6 +31,7 @@ interface Event {
   venue: string;
   date: string;
   description: string;
+  createdByName: string;
 }
 
 
@@ -100,6 +101,9 @@ export default function EventCards({ events }: { events: Event[] }) {
       >
         Date: <span className="text-slate-500">{event.date}</span>
       </p>
+      <p className={`${bodyFont.className} relative mb-1 text-sm text-slate-700 capitalize`}>
+        Organized By: <span className="text-slate-500">{event.createdByName}</span>
+      </p>
 
       <div className="relative mt-4 flex items-center justify-between">
         {!isPast ? (
@@ -135,7 +139,7 @@ export default function EventCards({ events }: { events: Event[] }) {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.35 }}
-            className={`${bodyFont.className} relative mt-4 border-t border-slate-200 pt-4 text-sm text-slate-700`}
+            className={`${bodyFont.className} relative mt-4 border-t border-slate-200 pt-4 text-sm text-slate-700 capitalize`}
           >
             {event.description}
           </motion.p>

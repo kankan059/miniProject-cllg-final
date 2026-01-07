@@ -10,6 +10,7 @@ interface EventInfo {
   name: string;
   isPaid: boolean;
   amount?: number;
+  createdByName: string;
 }
 
 const departments = [
@@ -143,7 +144,7 @@ return (
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15 }}
-        className="mb-2 text-center text-3xl font-extrabold tracking-widest text-slate-800"
+        className="mb-2 text-center text-3xl font-extrabold tracking-widest text-slate-800 capitalize"
       >
         {eventInfo.name}
       </motion.h1>
@@ -156,6 +157,18 @@ return (
       >
         Event Registration
       </motion.p>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.35 }}
+        className="mb-8 flex items-center justify-center space-x-2 capitalize"
+      > 
+      {eventInfo.createdByName && (
+        <>
+          <span className="text-sm text-slate-500">Organized By:</span> {eventInfo.createdByName}
+        </> 
+      )}
+      </motion.div>
 
       {qrToken ? (
         <motion.div
