@@ -9,7 +9,7 @@ interface Props {
 }
 
 export default function EventRegistrations({ eventId, eventName }: Props) {
-  const [data, setData] = useState<unknown>(null);
+  const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function EventRegistrations({ eventId, eventName }: Props) {
       </h3>
 
       <span className="rounded-full bg-sky-100 px-3 py-1 text-sm font-semibold text-sky-700">
-        {data.count}
+        {data.registrations.length}
       </span>
     </div>
 
