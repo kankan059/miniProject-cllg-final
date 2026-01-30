@@ -23,7 +23,7 @@ return (
         {/* Brand */}
         <div>
           <h2 className="text-lg font-extrabold tracking-wide text-slate-800">
-            EventManager
+            Event Management System
           </h2>
           <p className="mt-2 text-sm text-slate-500">
             Plan, manage, and enjoy your events with ease.
@@ -119,7 +119,7 @@ return (
           </a>
 
           <a
-            href="mailto:ezeestudy@gmail.com"
+            href="mailto:ezazstudy@gmail.com"
             className="flex items-center gap-1 text-slate-500 hover:text-sky-600 transition"
           >
             <Mail size={18} />
@@ -128,7 +128,7 @@ return (
         </div>
 
         <p className="text-center text-slate-500">
-          © {new Date().getFullYear()} EventManager. All rights reserved.
+          © {new Date().getFullYear()} Event Management System for Minor Project of 5th Sem
         </p>
       </motion.div>
     </div>

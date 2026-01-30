@@ -116,6 +116,7 @@ export const verifyPayment = async (req: Request, res: Response) => {
     <p><b>${event.name}</b></p>
     <p>Date: ${event.date}</p>
     <p>Venue: ${event.venue}</p>
+    <p>organized by: ${event.createdByName}</p>
 
     ${qrToken
                 ? `<p>Show this QR at entry:</p>

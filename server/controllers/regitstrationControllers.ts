@@ -171,6 +171,7 @@ export const createRegistration = async (req: Request, res: Response) => {
       <p><b>${event.name}</b></p>
       <p>Date: ${event.date}</p>
       <p>Venue: ${event.venue}</p>
+      <p>organized by: ${event.createdByName}</p>
       <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${qrToken}" />
       `
     );
