@@ -109,7 +109,7 @@ export const verifyPayment = async (req: Request, res: Response) => {
         const event = await Event.findById(eventId);
         sendEmail(
             userEmail,
-            "🎉 Event Registration Successful",
+            "Event Registration Successful",
             `
     <h2>Registration Confirmed</h2>
     <p>You are successfully registered for:</p>
