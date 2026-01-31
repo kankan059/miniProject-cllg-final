@@ -107,7 +107,7 @@ export const verifyPayment = async (req: Request, res: Response) => {
 
         });
         const event = await Event.findById(eventId);
-        await sendEmail(
+        sendEmail(
             userEmail,
             "🎉 Event Registration Successful",
             `

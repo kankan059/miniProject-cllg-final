@@ -163,7 +163,7 @@ export const createRegistration = async (req: Request, res: Response) => {
       paidAmount: event.isPaid ? event.amount : 0,
     });
 
-    await sendEmail(
+    sendEmail(
       userEmail,
       "Event Registration Successful",
       `
