@@ -74,25 +74,6 @@ return (
           </ul>
         </div>
       </motion.div>
-
-      {/* Bottom */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.15 }}
-        className="mt-10 flex flex-col items-center gap-4 border-t border-sky-200 pt-6 text-sm"
-      >
-        <p className="flex items-center gap-2 text-slate-500">
-          <Users size={16} />
-          Developed by{" "}
-          <span className="font-medium text-slate-700">
-            Espada
-          </span>
-        </p>
-        <p className="text-center text-slate-500">
-          © {new Date().getFullYear()} Event Management System for Minor Project of 5th Sem
-        </p>
-      </motion.div>
     </div>
   </footer>
 );
