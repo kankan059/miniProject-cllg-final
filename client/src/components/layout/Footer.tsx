@@ -86,47 +86,9 @@ return (
           <Users size={16} />
           Developed by{" "}
           <span className="font-medium text-slate-700">
-            Kankan Ray & Ezaz Ahmed Khan
+            Espada
           </span>
         </p>
-
-        {/* Social + Email */}
-        <div className="flex flex-wrap items-center justify-center gap-6">
-          <a
-            href="https://instagram.com/kongkon_ray_"
-            target="_blank"
-            className="flex items-center gap-1 text-slate-500 hover:text-pink-500 transition"
-          >
-            <Instagram size={18} />
-            <span>Kankan</span>
-          </a>
-
-          <a
-            href="mailto:kankanray059@gmail.com"
-            className="flex items-center gap-1 text-slate-500 hover:text-sky-600 transition"
-          >
-            <Mail size={18} />
-            <span>Email</span>
-          </a>
-
-          <a
-            href="https://instagram.com/ezee.io"
-            target="_blank"
-            className="flex items-center gap-1 text-slate-500 hover:text-pink-500 transition"
-          >
-            <Instagram size={18} />
-            <span>Ezaz</span>
-          </a>
-
-          <a
-            href="mailto:ezazstudy@gmail.com"
-            className="flex items-center gap-1 text-slate-500 hover:text-sky-600 transition"
-          >
-            <Mail size={18} />
-            <span>Email</span>
-          </a>
-        </div>
-
         <p className="text-center text-slate-500">
           © {new Date().getFullYear()} Event Management System for Minor Project of 5th Sem
         </p>
